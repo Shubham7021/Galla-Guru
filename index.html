@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Galla Guru</title>
+<style>
+:root{--bg:#fff;--pn:#f1f3f6;--ln:#e3e8e5;--tx:#16211b;--mu:#5f6f66;--g:#16a34a;--gd:#0f7a36;--gl:#e7f6ec;--rd:#dc2626;--rl:#fdecec;--am:#b45309;--al:#fef3e2;--btn:#15803d;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1512;--pn:#18211c;--ln:#2a3830;--tx:#e8f0ec;--mu:#9bb0a4;--g:#34d070;--gd:#4ade80;--gl:#173a24;--rd:#f87171;--rl:#3a1a1a;--am:#fbbf24;--al:#3a2c10;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1512;--pn:#18211c;--ln:#2a3830;--tx:#e8f0ec;--mu:#9bb0a4;--g:#34d070;--gd:#4ade80;--gl:#173a24;--rd:#f87171;--rl:#3a1a1a;--am:#fbbf24;--al:#3a2c10;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg)}body{color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.app{display:flex;min-height:100%}.side{width:220px;flex:none;border-right:1px solid var(--ln);padding:16px 12px;position:sticky;top:env(safe-area-inset-top,0px);height:100vh}
+.brand{font-weight:800;font-size:18px;color:var(--gd);padding:4px 10px 14px;white-space:nowrap}.brand span{color:var(--tx)}
+.nav{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;color:var(--mu);font:inherit;padding:9px 12px;border-radius:8px;cursor:pointer;text-align:left;white-space:nowrap}
+.nav:hover{background:var(--pn)}.nav.on{background:var(--gl);color:var(--gd);font-weight:600}
+main{flex:1;min-width:0;padding:22px;max-width:1100px}h1{font-size:22px;margin:0}h3{margin:0 0 10px;font-size:16px}
+.hd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin-bottom:16px}
+.card{border:1px solid var(--ln);border-radius:12px;padding:14px;background:var(--bg)}.card .l{color:var(--mu);font-size:13px}.card .v{font-size:22px;font-weight:700;margin:2px 0}.card .n{color:var(--mu);font-size:12px}
+.pos{border-color:var(--g);background:var(--gl)}.neg{border-color:var(--rd);background:var(--rl)}
+.hero{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:linear-gradient(135deg,#15803d,#22c55e);color:#fff;border-radius:16px;padding:16px 18px;margin-bottom:16px}.hl{font-size:20px;font-weight:800}.hp{background:rgba(255,255,255,.22);padding:6px 12px;border-radius:20px;font-weight:600}.card{border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.07)}.card .v{letter-spacing:-.5px}.brand{font-size:20px}.tg{color:var(--mu);font-size:11px;padding:0 10px 12px;margin-top:-10px}
+.pc{display:flex;gap:8px;height:170px}.pcol{flex:1;position:relative;height:100%;font-size:11px;color:var(--mu);text-align:center}.pcol .pv{position:absolute;top:0;left:0;right:0}.pcol .pm{position:absolute;bottom:0;left:0;right:0}.pcol:after{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--ln)}.pbar{position:absolute;left:50%;transform:translateX(-50%);width:70%;max-width:40px;min-height:2px;z-index:1}.pbar.p{background:linear-gradient(#22c55e,#15803d);border-radius:6px 6px 0 0}.pbar.n{background:linear-gradient(#b91c1c,#ef4444);border-radius:0 0 6px 6px}
+.app{background:var(--pn)}.side{background:var(--bg)}.bar{background:linear-gradient(#4ade80,#15803d)}.hero{box-shadow:0 6px 16px rgba(21,128,61,.25)}.cards .card:nth-child(1){border-top:4px solid #3b82f6}.cards .card:nth-child(2){border-top:4px solid #14b8a6}.cards .card:nth-child(3){border-top:4px solid #f59e0b}.cards .card:nth-child(4){border-top:4px solid var(--g)}.cards .card:nth-child(5){border-top:4px solid #8b5cf6}
+.top{background:#2874f0;display:flex;align-items:baseline;gap:12px;padding:12px 22px;position:sticky;top:env(safe-area-inset-top,0px);z-index:9}body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:#2874f0;z-index:10}.top .brand{color:#fff;font-style:italic;font-size:22px;padding:0}.top .brand span{color:#ffe500}.top .tg{color:#dbe7ff;font-size:12px;padding:0;margin:0}.side{top:52px;height:calc(100vh - 52px)}.nav.on{background:#e8f0fe;color:#2874f0}.btn{background:#fb641b;border-radius:4px;text-transform:uppercase;font-size:13px;letter-spacing:.3px;box-shadow:0 1px 2px rgba(0,0,0,.2)}.msg.me{background:#2874f0}.hero{background:linear-gradient(135deg,#2874f0,#1b55c4);box-shadow:0 6px 16px rgba(40,116,240,.25)}.bar{background:linear-gradient(#5b9bff,#2874f0)}.card{border-radius:4px}.card:not(.pos):not(.neg){border-color:#e0e0e0}input:focus,select:focus{outline:2px solid #2874f0}
+.two{display:grid;grid-template-columns:1.3fr 1fr;gap:12px;margin-bottom:12px}
+.chart{display:flex;align-items:flex-end;gap:8px;height:190px}.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:11px;color:var(--mu)}
+.bar{width:100%;max-width:46px;background:var(--g);border-radius:6px 6px 0 0;min-height:2px;opacity:.55}.bar.on{opacity:1}
+.pb{height:8px;background:var(--gl);border-radius:4px;overflow:hidden;margin-top:3px}.pb i{display:block;height:100%;background:var(--g)}
+.li{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid var(--ln)}.li:last-child{border:0}
+.btn{background:var(--btn);color:#fff;border:0;border-radius:8px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer}.btn.ghost{background:none;color:var(--tx);border:1px solid var(--ln)}.btn.red{background:var(--rd);color:#fff}
+.lnk{background:none;border:0;color:var(--gd);cursor:pointer;font:inherit;padding:2px 6px}.lnk.red{color:var(--rd)}
+input,select{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:8px 10px;width:100%}label{display:block;font-size:13px;color:var(--mu)}label input,label select{margin-top:3px}
+.bar2{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.bar2 input{flex:1;min-width:150px}.bar2 select{width:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:10px}.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.form{background:var(--pn);margin-bottom:14px}.err{background:var(--rl);color:var(--rd);padding:8px 10px;border-radius:8px;margin-top:6px;font-size:14px}.info{background:var(--gl);color:var(--gd);padding:8px 10px;border-radius:8px;margin-bottom:10px;font-size:14px}
+.tw{overflow-x:auto;border:1px solid var(--ln);border-radius:12px}table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:9px 12px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--ln)}th{background:var(--pn);color:var(--mu);font-weight:600;font-size:12px}tr:last-child td{border:0}
+.tag{padding:2px 8px;border-radius:10px;font-size:12px;font-weight:600}.tag.ok{background:var(--gl);color:var(--gd)}.tag.low{background:var(--al);color:var(--am)}.tag.out{background:var(--rl);color:var(--rd)}
+.empty{text-align:center;color:var(--mu);padding:30px 10px}.mu{color:var(--mu);font-size:13px}.gp{color:var(--gd)}.ls{color:var(--rd)}
+.chat{border:1px solid var(--ln);border-radius:12px;padding:12px;height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.msg{max-width:85%;padding:8px 12px;border-radius:12px;white-space:pre-line}.msg.me{align-self:flex-end;background:var(--btn);color:#fff}.msg.bot{background:var(--pn)}
+.chip{border:1px solid var(--ln);background:var(--bg);color:var(--tx);border-radius:16px;padding:5px 11px;font:inherit;font-size:13px;cursor:pointer}
+@media(max-width:800px){.app{flex-direction:column}.side{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%;height:auto;display:flex;justify-content:space-around;gap:0;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));border-right:0;border-top:1px solid var(--ln);z-index:20}.top{padding:10px 14px}.tg{display:none}.nav{width:auto;flex:1;flex-direction:column;gap:2px;font-size:11px;padding:4px 2px;align-items:center;justify-content:center}.nav span{font-size:18px}main{padding:14px 14px 90px}.two{grid-template-columns:1fr}}
+</style></head>
+<body><div id="root"></div>
+<script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script id="core">
+/* CORE: all money and stock rules live here, separate from the screens */
+const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const r2=n=>Math.round(n*100)/100;
+const Core={
+uid:p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+month:()=>ymd(new Date()).slice(0,7),
+lastMonths(n){const t=new Date(),o=[];for(let i=n-1;i>=0;i--)o.push(ymd(new Date(t.getFullYear(),t.getMonth()-i,1)).slice(0,7));return o},
+demo(){const t=new Date();
+ const P=[["Basmati Rice 5kg",380,450,24,10],["Atta 10kg",390,440,6,10],["Toor Dal 1kg",125,150,30,12],["Sunflower Oil 1L",130,155,8,12],["Sugar 1kg",40,46,60,20],["Tea 500g",210,245,15,8],["Maggi 12-pack",140,168,4,10],["Detergent 1kg",95,120,22,8]].map((p,i)=>({id:"p"+i,name:p[0],cost:p[1],price:p[2],stock:p[3],min:p[4]}));
+ const sales=[],expenses=[];let n=0;
+ for(let m=0;m<6;m++){const y=t.getFullYear(),mo=t.getMonth()-m,cap=m===0?t.getDate():28;
+  for(let k=0;k<45;k++){const p=P[(k*3+m)%8],day=Math.min(cap,1+((k*3+m*5)%28));
+   sales.push({id:"s"+(n++),date:ymd(new Date(y,mo,day)),pid:p.id,qty:6+((k*7+m*3)%17),price:p.price,cost:p.cost})}
+  [["Rent",6000,1],["Salaries",8000,5],["Electricity",1800+m*60,8],["Transport",900+m*40,10],["Packaging",700,12]].forEach(e=>{if(m>0||e[2]<=t.getDate())expenses.push({id:"e"+(n++),date:ymd(new Date(y,mo,e[2])),category:e[0],amount:e[1]})})}
+ sales.sort((a,b)=>b.date.localeCompare(a.date));expenses.sort((a,b)=>b.date.localeCompare(a.date));
+ return{products:P,sales,expenses}},
+summary(d,per){const f=x=>per==="all"||x.date.startsWith(per);let revenue=0,cogs=0,orders=0;
+ d.sales.filter(f).forEach(s=>{revenue+=s.qty*s.price;cogs+=s.qty*s.cost;orders++});
+ const expenses=d.expenses.filter(f).reduce((a,e)=>a+e.amount,0);
+ return{revenue:r2(revenue),cogs:r2(cogs),gross:r2(revenue-cogs),expenses:r2(expenses),net:r2(revenue-cogs-expenses),orders}},
+productStats(d,per){return d.products.map(p=>{let units=0,revenue=0,profit=0;
+ d.sales.forEach(s=>{if(s.pid===p.id&&(per==="all"||s.date.startsWith(per))){units+=s.qty;revenue+=s.qty*s.price;profit+=s.qty*(s.price-s.cost)}});
+ return{name:p.name,units,revenue:r2(revenue),profit:r2(profit)}})},
+lowStock:d=>d.products.filter(p=>p.stock<=p.min),
+validateSale(d,s,editId){const p=d.products.find(x=>x.id===s.pid);
+ if(!s.date)return"Choose a date.";if(!p)return"Choose a product.";
+ if(!Number.isInteger(s.qty)||s.qty<1)return"Quantity must be a whole number, 1 or more.";
+ if(!(s.price>0))return"Selling price must be greater than 0.";
+ if(!(s.cost>=0))return"Purchase cost cannot be negative.";
+ const old=editId&&d.sales.find(x=>x.id===editId),avail=p.stock+(old&&old.pid===s.pid?old.qty:0);
+ if(s.qty>avail)return"Only "+avail+" in stock for "+p.name+".";return""},
+applySale(d,s,editId){const err=Core.validateSale(d,s,editId);if(err)return{err};
+ const products=d.products.map(p=>({...p})),old=editId&&d.sales.find(x=>x.id===editId);
+ if(old)products.forEach(p=>{if(p.id===old.pid)p.stock+=old.qty});
+ products.forEach(p=>{if(p.id===s.pid)p.stock-=s.qty});
+ const row={date:s.date,pid:s.pid,qty:s.qty,price:s.price,cost:s.cost,id:editId||Core.uid("s")};
+ const sales=editId?d.sales.map(x=>x.id===editId?row:x):[row,...d.sales];
+ return{data:{...d,products,sales}}},
+removeSale(d,id){const old=d.sales.find(x=>x.id===id);if(!old)return d;
+ return{...d,sales:d.sales.filter(x=>x.id!==id),products:d.products.map(p=>p.id===old.pid?{...p,stock:p.stock+old.qty}:p)}},
+saveProduct(d,p,id){const name=(p.name||"").trim();if(!name)return{err:"Enter a product name."};
+ if(d.products.some(x=>x.id!==id&&x.name.toLowerCase()===name.toLowerCase()))return{err:"A product with this name already exists."};
+ if(!(p.cost>=0))return{err:"Purchase cost cannot be negative."};if(!(p.price>0))return{err:"Selling price must be greater than 0."};
+ if(!Number.isInteger(p.stock)||p.stock<0)return{err:"Stock must be a whole number, 0 or more."};
+ if(!Number.isInteger(p.min)||p.min<0)return{err:"Minimum stock must be a whole number, 0 or more."};
+ const np={id:id||Core.uid("p"),name,cost:p.cost,price:p.price,stock:p.stock,min:p.min};
+ return{data:{...d,products:id?d.products.map(x=>x.id===id?np:x):[...d.products,np]}}},
+removeProduct(d,id){if(d.sales.some(s=>s.pid===id))return{err:"This product has sales recorded, so it cannot be deleted."};return{data:{...d,products:d.products.filter(p=>p.id!==id)}}},
+saveExpense(d,e,id){if(!e.date)return{err:"Choose a date."};if(!e.category)return{err:"Choose a category."};if(!(e.amount>0))return{err:"Amount must be greater than 0."};
+ const ne={id:id||Core.uid("e"),date:e.date,category:e.category,amount:e.amount};
+ return{data:{...d,expenses:id?d.expenses.map(x=>x.id===id?ne:x):[ne,...d.expenses]}}},
+ask(q,d){q=q.toLowerCase();const mo=/month/.test(q),per=mo?Core.month():"all",lab=mo?"this month":"overall",s=Core.summary(d,per),I=n=>"₹"+Math.round(n).toLocaleString("en-IN");
+ const ps=Core.productStats(d,per).filter(x=>x.units>0);
+ if(!d.sales.length&&!d.expenses.length)return"There is no data yet. Add some sales and expenses, or reset the demo data in Settings.";
+ if(/(product|item).*profit|profit.*(product|item)|most profit|highest profit|best.*profit/.test(q)){if(!ps.length)return"No sales "+lab+" yet.";
+  const o=ps.slice().sort((a,b)=>b.profit-a.profit);return o[0].name+" made the most gross profit "+lab+": "+I(o[0].profit)+" from "+o[0].units+" units.\nNext: "+o.slice(1,3).map(x=>x.name+" ("+I(x.profit)+")").join(", ")+".\nGross profit is before shop expenses like rent."}
+ if(/expense|spend|spent/.test(q)){const c={};d.expenses.filter(e=>per==="all"||e.date.startsWith(per)).forEach(e=>c[e.category]=(c[e.category]||0)+e.amount);
+  const k=Object.entries(c).sort((a,b)=>b[1]-a[1]);return"Operating expenses "+lab+": "+I(s.expenses)+(k.length?".\nBiggest: "+k.slice(0,3).map(x=>x[0]+" "+I(x[1])).join(", ")+".":".")}
+ if(/stock|restock|inventory|low/.test(q)){const l=Core.lowStock(d);return l.length?"Low stock items:\n"+l.map(p=>p.name+": "+p.stock+" left (minimum "+p.min+")").join("\n"):"All products are above their minimum stock."}
+ if(/top|best.?sell|most sold|popular|sell/.test(q)){const o=ps.slice().sort((a,b)=>b.units-a.units).slice(0,3);return o.length?"Top sellers "+lab+" by units:\n"+o.map((x,i)=>(i+1)+". "+x.name+": "+x.units+" units ("+I(x.revenue)+")").join("\n"):"No sales "+lab+" yet."}
+ if(/profit|earn|margin/.test(q))return"Estimated net profit "+lab+": "+I(s.net)+".\nRevenue "+I(s.revenue)+" − product cost "+I(s.cogs)+" = gross profit "+I(s.gross)+"; minus expenses "+I(s.expenses)+".";
+ if(/sale|revenue|sold|order|turnover/.test(q))return"Revenue "+lab+": "+I(s.revenue)+" from "+s.orders+" orders (gross profit "+I(s.gross)+").";
+ return"I can answer simple questions about your data, for example:\n• Which product made the most profit?\n• What were my expenses this month?\n• What is my net profit?\n• Which items are low on stock?"},
+tests(){const T=[],ok=(n,c)=>T.push([n,!!c]);
+ const base=()=>({products:[{id:"a",name:"A",cost:30,price:50,stock:10,min:2},{id:"b",name:"B",cost:10,price:15,stock:5,min:1}],sales:[],expenses:[{id:"e1",date:"2026-01-05",category:"Rent",amount:20}]});
+ const S=(pid,qty,price,cost,date)=>({date:date===undefined?"2026-01-10":date,pid,qty,price,cost});
+ let d=Core.applySale(base(),S("a",3,50,30)).data,s=Core.summary(d,"all");
+ ok("Revenue = 3 × ₹50 = ₹150",s.revenue===150);ok("Product cost = 3 × ₹30 = ₹90",s.cogs===90);
+ ok("Gross profit = ₹60",s.gross===60);ok("Net profit = 150 − 90 − 20 = ₹40",s.net===40);
+ ok("Stock deducted once (10 → 7)",d.products[0].stock===7);
+ const id=d.sales[0].id,e=Core.applySale(d,S("a",5,50,30),id).data;
+ ok("Edit qty 3 → 5 gives stock 5 (no double deduction)",e.products[0].stock===5&&e.sales.length===1);
+ const c=Core.applySale(d,S("b",2,15,10),id).data;
+ ok("Changing product restores old stock, deducts new",c.products[0].stock===10&&c.products[1].stock===3);
+ ok("Deleting a sale restores stock",Core.removeSale(d,id).products[0].stock===10);
+ ok("Rejects quantity 0, negative and decimal",[0,-2,1.5].every(q=>Core.applySale(base(),S("a",q,50,30)).err));
+ ok("Rejects quantity above stock",!!Core.applySale(base(),S("a",11,50,30)).err);
+ ok("Rejects price 0, negative cost, blank date",[S("a",1,0,30),S("a",1,50,-1),S("a",1,50,30,"")].every(x=>Core.applySale(base(),x).err));
+ ok("Rejected sale changes nothing",!Core.applySale(base(),S("a",11,50,30)).data);
+ ok("Expense must be above 0",!!Core.saveExpense(base(),{date:"2026-01-01",category:"Rent",amount:-5}).err);
+ ok("Duplicate product name rejected",!!Core.saveProduct(base(),{name:"a",cost:1,price:2,stock:1,min:0}).err);
+ ok("Product with sales cannot be deleted",!!Core.removeProduct(d,"a").err);
+ return T}
+};
+if(typeof module!=="undefined")module.exports=Core;
+</script>
+<script>
+const{useState,useEffect}=React;
+const h=(t,p,...c)=>{if(p&&p.class!==undefined){p={...p,className:p.class};delete p.class}return React.createElement(t,p,...c)};
+const html=htm.bind(h);
+const inr=n=>(n<0?"−":"")+"₹"+Math.abs(Math.round(n)).toLocaleString("en-IN");
+const inr2=n=>"₹"+Number(n).toLocaleString("en-IN",{maximumFractionDigits:2});
+const lbl=m=>new Date(m+"-15").toLocaleString("en-IN",{month:"short",year:"numeric"});
+const sh=m=>new Date(m+"-15").toLocaleString("en-IN",{month:"short"});
+const KEY="smartbiz_v1";
+function load(){try{const x=localStorage.getItem(KEY);if(x)return JSON.parse(x)}catch(e){}return Core.demo()}
+const NAV=[["dashboard","▦","Dashboard"],["sales","₹","Sales"],["expenses","⇩","Expenses"],["inventory","▤","Inventory"],["ai","✦","Ask Guru"],["settings","⚙","Settings"]];
+const CATS=["Rent","Salaries","Electricity","Transport","Packaging","Marketing","Other"];
+
+function Confirm({label,onYes,cls}){const[c,setC]=useState(false);
+ return c?html`<button className=${"lnk red"} onClick=${()=>{setC(false);onYes()}} onBlur=${()=>setC(false)} autoFocus>Sure?</button>`:html`<button className=${cls||"lnk red"} onClick=${()=>setC(true)}>${label}</button>`}
+function Card({l,v,n,tone}){return html`<div className=${"card "+(tone||"")}><div className="l">${l}</div><div className="v">${v}</div><div className="n">${n}</div></div>`}
+function Tbl({head,rows,empty}){return rows.length?html`<div className="tw"><table><thead><tr>${head.map(x=>html`<th key=${x}>${x}</th>`)}</tr></thead><tbody>${rows.map(r=>html`<tr key=${r.k}>${r.c.map((c,i)=>html`<td key=${i}>${c}</td>`)}</tr>`)}</tbody></table></div>`:html`<div className="card empty">${empty}</div>`}
+function Form({title,fields,f,setF,onSave,onCancel,extra}){
+ return html`<div className="card form"><h3>${title}</h3><div className="grid">${fields.map(x=>html`<label key=${x.k}>${x.l}${x.o?html`<select value=${f[x.k]} onChange=${e=>setF({...f,[x.k]:e.target.value,err:""},x.k)}>${x.o.map(o=>html`<option key=${o[0]} value=${o[0]}>${o[1]}</option>`)}</select>`:html`<input type=${x.t||"text"} min=${x.min} step=${x.step} value=${f[x.k]} onChange=${e=>setF({...f,[x.k]:e.target.value,err:""},x.k)}/>`}</label>`)}</div>${extra}${f.err?html`<div className="err">${f.err}</div>`:null}<div className="row"><button className="btn" onClick=${onSave}>Save</button><button className="btn ghost" onClick=${onCancel}>Cancel</button></div></div>`}
+
+function Dash({d,go}){const[per,setPer]=useState(Core.month());
+ const s=Core.summary(d,per),ms=Core.lastMonths(6),bars=ms.map(m=>[m,Core.summary(d,m).revenue]),mx=Math.max(1,...bars.map(b=>b[1]));const pb=ms.map(m=>[m,Core.summary(d,m).net]),pm=Math.max(1,...pb.map(b=>Math.abs(b[1])));
+ const top=Core.productStats(d,per).filter(x=>x.units>0).sort((a,b)=>b.units-a.units).slice(0,5),tm=Math.max(1,...top.map(x=>x.units)),low=Core.lowStock(d);
+ return html`<div><div className="hd"><h1>Dashboard</h1><select style=${{width:"auto"}} value=${per} onChange=${e=>setPer(e.target.value)}>${ms.slice().reverse().map(m=>html`<option key=${m} value=${m}>${lbl(m)}</option>`)}<option value="all">All time</option></select></div>
+ <div className="hero"><div><div className="hl">Namaste! 🙏</div><div>Aaj ka hisaab, ek nazar mein</div></div><div className="hp">${s.net<0?"Kharcha zyada hai":"Munafa chal raha hai"} · ${inr(s.net)}</div></div>
+ <div className="cards">
+ <${Card} l="Total sales (revenue)" v=${inr(s.revenue)} n="Quantity × selling price"/>
+ <${Card} l="Gross profit" v=${inr(s.gross)} n="Revenue − product cost"/>
+ <${Card} l="Operating expenses" v=${inr(s.expenses)} n="Rent, salaries, bills…"/>
+ <${Card} l="Estimated net profit" v=${inr(s.net)} n="Gross profit − expenses" tone=${s.net<0?"neg":"pos"}/>
+ <${Card} l="Orders" v=${s.orders} n="Sales entries"/></div>
+ <div className="two"><div className="card"><h3>Monthly sales (revenue)</h3>${d.sales.length?html`<div className="chart">${bars.map(b=>html`<div className="col" key=${b[0]}><span>${b[1]?inr(b[1]/1000)+"k":"–"}</span><div className=${"bar"+(b[0]===per?" on":"")} style=${{height:(b[1]/mx*140)+"px"}}></div><span>${sh(b[0])}</span></div>`)}</div>`:html`<div className="empty">No sales yet.</div>`}</div>
+ <div className="card"><h3>Top-selling products</h3>${top.length?top.map(x=>html`<div key=${x.name} style=${{marginBottom:8}}><div className="li" style=${{border:0,padding:0}}><span>${x.name}</span><b>${x.units} units</b></div><div className="pb"><i style=${{width:(x.units/tm*100)+"%"}}></i></div></div>`):html`<div className="empty">No sales in this period.</div>`}</div></div>
+ <div className="card" style=${{marginBottom:12}}><h3>Monthly estimated net profit</h3>${d.sales.length?html`<div className="pc">${pb.map(b=>html`<div className="pcol" key=${b[0]}><span className="pv">${(b[1]<0?"−":"")+"₹"+(Math.abs(b[1])/1000).toFixed(1)+"k"}</span><div className=${"pbar "+(b[1]<0?"n":"p")} style=${b[1]<0?{top:"50%",height:(Math.abs(b[1])/pm*60)+"px"}:{bottom:"50%",height:(b[1]/pm*60)+"px"}}></div><span className="pm">${sh(b[0])}</span></div>`)}</div><div className="mu">Green = profit, red = loss. Gross profit minus expenses.</div>`:html`<div className="empty">No sales yet.</div>`}</div>
+ <div className="card"><h3>Low-stock alerts</h3>${low.length?low.map(p=>html`<div className="li" key=${p.id}><span>${p.name}</span><span className=${"tag "+(p.stock===0?"out":"low")}>${p.stock===0?"Out of stock":p.stock+" left (min "+p.min+")"}</span></div>`):html`<div className="empty">All products are well stocked.</div>`}${low.length?html`<div className="row"><button className="btn ghost" onClick=${()=>go("inventory")}>Open inventory</button></div>`:null}</div>
+ <p className="mu">Net profit is an estimate: it only counts expenses you have recorded.</p></div>`}
+
+function Sales({d,setD}){const[q,setQ]=useState(""),[pf,setPf]=useState("all"),[mf,setMf]=useState("all"),[f,setF0]=useState(null);
+ const setF=(nf,k)=>{if(k==="pid"&&!nf.id){const p=d.products.find(x=>x.id===nf.pid);if(p)nf={...nf,price:p.price,cost:p.cost}}setF0(nf)};
+ const open=s=>{const p=d.products[0];setF0(s?{id:s.id,date:s.date,pid:s.pid,qty:s.qty,price:s.price,cost:s.cost,err:""}:p?{date:ymd(new Date()),pid:p.id,qty:1,price:p.price,cost:p.cost,err:""}:{err:"Add a product in Inventory first.",date:"",pid:"",qty:1,price:"",cost:""})};
+ const save=()=>{const r=Core.applySale(d,{date:f.date,pid:f.pid,qty:Number(f.qty),price:Number(f.price),cost:Number(f.cost)},f.id);r.err?setF0({...f,err:r.err}):(setD(r.data),setF0(null))};
+ const nm=id=>(d.products.find(p=>p.id===id)||{}).name||"?";
+ const rows=d.sales.filter(s=>(pf==="all"||s.pid===pf)&&(mf==="all"||s.date.startsWith(mf))&&nm(s.pid).toLowerCase().includes(q.toLowerCase())).sort((a,b)=>b.date.localeCompare(a.date));
+ const rev=rows.reduce((a,s)=>a+s.qty*s.price,0),gp=rows.reduce((a,s)=>a+s.qty*(s.price-s.cost),0);
+ const pv=f&&Number(f.qty)>0&&Number(f.price)>0?html`<div className="mu">Revenue ${inr2(f.qty*f.price)} · Product cost ${inr2(f.qty*f.cost)} · Gross profit ${inr2(f.qty*(f.price-f.cost))}</div>`:null;
+ return html`<div><div className="hd"><h1>Sales</h1><button className="btn" onClick=${()=>open()}>+ Add sale</button></div>
+ ${f?html`<${Form} title=${f.id?"Edit sale":"Add sale"} f=${f} setF=${setF} onSave=${save} onCancel=${()=>setF0(null)} extra=${pv} fields=${[{k:"date",l:"Date",t:"date"},{k:"pid",l:"Product",o:d.products.map(p=>[p.id,p.name+" (stock "+p.stock+")"])},{k:"qty",l:"Quantity",t:"number",min:1,step:1},{k:"price",l:"Selling price / unit (₹)",t:"number",min:0,step:"0.01"},{k:"cost",l:"Purchase cost / unit (₹)",t:"number",min:0,step:"0.01"}]}/>`:null}
+ <div className="bar2"><input placeholder="Search product…" value=${q} onChange=${e=>setQ(e.target.value)}/><select value=${pf} onChange=${e=>setPf(e.target.value)}><option value="all">All products</option>${d.products.map(p=>html`<option key=${p.id} value=${p.id}>${p.name}</option>`)}</select><select value=${mf} onChange=${e=>setMf(e.target.value)}><option value="all">All months</option>${Core.lastMonths(6).reverse().map(m=>html`<option key=${m} value=${m}>${lbl(m)}</option>`)}</select></div>
+ <p className="mu">${rows.length} sales · Revenue ${inr(rev)} · Gross profit ${inr(gp)}</p>
+ <${Tbl} head=${["Date","Product","Qty","Price","Cost","Revenue","Gross profit",""]} empty=${d.sales.length?"No sales match your filters.":"No sales yet. Click “Add sale” to record your first one."} rows=${rows.map(s=>({k:s.id,c:[s.date,nm(s.pid),s.qty,inr2(s.price),inr2(s.cost),inr(s.qty*s.price),html`<span className=${s.price>=s.cost?"gp":"ls"}>${inr(s.qty*(s.price-s.cost))}</span>`,html`<span><button className="lnk" onClick=${()=>open(s)}>Edit</button><${Confirm} label="Delete" onYes=${()=>setD(Core.removeSale(d,s.id))}/></span>`]}))}/></div>`}
+
+function Expenses({d,setD}){const[cf,setCf]=useState("all"),[mf,setMf]=useState("all"),[f,setF]=useState(null);
+ const open=e=>setF(e?{id:e.id,date:e.date,category:e.category,amount:e.amount,err:""}:{date:ymd(new Date()),category:"Rent",amount:"",err:""});
+ const save=()=>{const r=Core.saveExpense(d,{date:f.date,category:f.category,amount:Number(f.amount)},f.id);r.err?setF({...f,err:r.err}):(setD(r.data),setF(null))};
+ const rows=d.expenses.filter(e=>(cf==="all"||e.category===cf)&&(mf==="all"||e.date.startsWith(mf))).sort((a,b)=>b.date.localeCompare(a.date));
+ return html`<div><div className="hd"><h1>Expenses</h1><button className="btn" onClick=${()=>open()}>+ Add expense</button></div>
+ ${f?html`<${Form} title=${f.id?"Edit expense":"Add expense"} f=${f} setF=${setF} onSave=${save} onCancel=${()=>setF(null)} fields=${[{k:"date",l:"Date",t:"date"},{k:"category",l:"Category",o:CATS.map(c=>[c,c])},{k:"amount",l:"Amount (₹)",t:"number",min:0,step:"0.01"}]}/>`:null}
+ <div className="bar2"><select value=${cf} onChange=${e=>setCf(e.target.value)}><option value="all">All categories</option>${CATS.map(c=>html`<option key=${c}>${c}</option>`)}</select><select value=${mf} onChange=${e=>setMf(e.target.value)}><option value="all">All months</option>${Core.lastMonths(6).reverse().map(m=>html`<option key=${m} value=${m}>${lbl(m)}</option>`)}</select></div>
+ <p className="mu">${rows.length} expenses · Total ${inr(rows.reduce((a,e)=>a+e.amount,0))}</p>
+ <${Tbl} head=${["Date","Category","Amount",""]} empty=${d.expenses.length?"No expenses match your filters.":"No expenses yet. Click “Add expense” to record rent, salaries or bills."} rows=${rows.map(e=>({k:e.id,c:[e.date,e.category,inr2(e.amount),html`<span><button className="lnk" onClick=${()=>open(e)}>Edit</button><${Confirm} label="Delete" onYes=${()=>setD({...d,expenses:d.expenses.filter(x=>x.id!==e.id)})}/></span>`]}))}/></div>`}
+
+function Inventory({d,setD}){const[q,setQ]=useState(""),[lo,setLo]=useState(false),[f,setF]=useState(null),[msg,setMsg]=useState("");
+ const open=p=>{setMsg("");setF(p?{id:p.id,name:p.name,cost:p.cost,price:p.price,stock:p.stock,min:p.min,err:""}:{name:"",cost:"",price:"",stock:"",min:5,err:""})};
+ const save=()=>{const r=Core.saveProduct(d,{name:f.name,cost:Number(f.cost),price:Number(f.price),stock:Number(f.stock),min:Number(f.min)},f.id);r.err?setF({...f,err:r.err}):(setD(r.data),setF(null))};
+ const rows=d.products.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())&&(!lo||p.stock<=p.min));
+ return html`<div><div className="hd"><h1>Inventory</h1><button className="btn" onClick=${()=>open()}>+ Add product</button></div>
+ ${msg?html`<div className="err">${msg}</div>`:null}
+ ${f?html`<${Form} title=${f.id?"Edit product":"Add product"} f=${f} setF=${setF} onSave=${save} onCancel=${()=>setF(null)} fields=${[{k:"name",l:"Product name"},{k:"cost",l:"Purchase cost (₹)",t:"number",min:0,step:"0.01"},{k:"price",l:"Selling price (₹)",t:"number",min:0,step:"0.01"},{k:"stock",l:"Stock quantity",t:"number",min:0,step:1},{k:"min",l:"Minimum stock level",t:"number",min:0,step:1}]}/>`:null}
+ <div className="bar2"><input placeholder="Search products…" value=${q} onChange=${e=>setQ(e.target.value)}/><label style=${{display:"flex",alignItems:"center",gap:6}}><input type="checkbox" style=${{width:"auto"}} checked=${lo} onChange=${e=>setLo(e.target.checked)}/>Low stock only</label></div>
+ <${Tbl} head=${["Product","Cost","Price","Stock","Min","Status",""]} empty=${d.products.length?"No products match.":"No products yet. Add your first product."} rows=${rows.map(p=>({k:p.id,c:[p.name,inr2(p.cost),inr2(p.price),p.stock,p.min,html`<span className=${"tag "+(p.stock===0?"out":p.stock<=p.min?"low":"ok")}>${p.stock===0?"Out":p.stock<=p.min?"Low":"OK"}</span>`,html`<span><button className="lnk" onClick=${()=>open(p)}>Edit</button><${Confirm} label="Delete" onYes=${()=>{const r=Core.removeProduct(d,p.id);r.err?setMsg(r.err):(setMsg(""),setD(r.data))}}/></span>`]}))}/>
+ <p className="mu">Stock goes down automatically when you record a sale, and back up if you delete or reduce that sale.</p></div>`}
+
+function Chat({d}){const[m,setM]=useState([{r:"bot",t:"Namaste! 🙏 I am the Galla Guru demo assistant. I answer by doing simple calculations on the data in this app. No real AI is connected."}]),[q,setQ]=useState("");
+ const send=t=>{t=(t||q).trim();if(!t)return;setM(x=>[...x,{r:"me",t},{r:"bot",t:Core.ask(t,d)}]);setQ("")};
+ useEffect(()=>{const el=document.getElementById("end");el&&el.scrollIntoView({block:"nearest"})},[m]);
+ return html`<div><div className="hd"><h1>Ask Guru</h1><span className="tag low">DEMO · local calculations · no AI API connected</span></div>
+ <div className="chat">${m.map((x,i)=>html`<div key=${i} className=${"msg "+x.r}>${x.t}</div>`)}<div id="end"></div></div>
+ <div className="row" style=${{marginBottom:10}}>${["Which product made the most profit?","What were my expenses this month?","What is my net profit?","Which items are low on stock?","Top selling products"].map(s=>html`<button key=${s} className="chip" onClick=${()=>send(s)}>${s}</button>`)}</div>
+ <div className="row"><input style=${{flex:1,minWidth:160}} placeholder="Ask about your sales, expenses, stock…" value=${q} onChange=${e=>setQ(e.target.value)} onKeyDown=${e=>e.key==="Enter"&&send()}/><button className="btn" onClick=${()=>send()}>Send</button></div></div>`}
+
+function Settings({setD}){const[t,setT]=useState(null);
+ return html`<div><div className="hd"><h1>Settings</h1></div>
+ <div className="card" style=${{marginBottom:12}}><h3>Your data</h3><p className="mu">Data is saved only in this browser on this device. Clearing browser data will remove it.</p>
+ <div className="row"><${Confirm} cls="btn" label="Reset demo data" onYes=${()=>setD(Core.demo())}/><${Confirm} cls="btn ghost" label="Clear everything" onYes=${()=>setD({products:[],sales:[],expenses:[]})}/></div></div>
+ <div className="card" style=${{marginBottom:12}}><h3>Calculation rules</h3><div className="mu">Revenue = quantity × selling price<br/>Product cost = quantity × purchase cost<br/>Gross profit = revenue − product cost<br/>Estimated net profit = gross profit − operating expenses</div></div>
+ <div className="card" style=${{marginBottom:12}}><h3>Self-check</h3><button className="btn" onClick=${()=>setT(Core.tests())}>Run calculation tests</button>${t?html`<div style=${{marginTop:10}}><b>${t.filter(x=>x[1]).length} of ${t.length} passed</b>${t.map(x=>html`<div key=${x[0]} className=${x[1]?"gp":"ls"}>${x[1]?"✓":"✗"} ${x[0]}</div>`)}</div>`:null}</div>
+ <div className="card"><h3>Not built yet</h3><div className="mu">Login, online payments, cloud storage and a real AI service are not part of this prototype.</div></div></div>`}
+
+function App(){const[d,setD]=useState(load),[v,setV]=useState("dashboard");
+ useEffect(()=>{try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}},[d]);
+ const go=x=>{setV(x);window.scrollTo(0,0)};
+ return html`<div><div className="top"><div className="brand">🪙 Galla <span>Guru</span></div><div className="tg">Dukaan ka hisaab, ab aasaan</div></div><div className="app"><nav className="side">${NAV.map(n=>html`<button key=${n[0]} className=${"nav"+(v===n[0]?" on":"")} onClick=${()=>go(n[0])}><span>${n[1]}</span>${n[2]}</button>`)}</nav>
+ <main>${v==="dashboard"?html`<${Dash} d=${d} go=${go}/>`:v==="sales"?html`<${Sales} d=${d} setD=${setD}/>`:v==="expenses"?html`<${Expenses} d=${d} setD=${setD}/>`:v==="inventory"?html`<${Inventory} d=${d} setD=${setD}/>`:v==="ai"?html`<${Chat} d=${d}/>`:html`<${Settings} setD=${setD}/>`}</main></div></div>`}
+ReactDOM.createRoot(document.getElementById("root")).render(html`<${App}/>`);
+</script></body></html>
