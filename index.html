@@ -259,7 +259,7 @@ function App(){const[d,setD]=useState(emptyData),[v,setV]=useState("dashboard"),
   const{data:{subscription}}=sb.auth.onAuthStateChange((event,session)=>{
    const user=session?.user||null;setAuthUser(user);
    if(user){if(currentUserId.current!==user.id){currentUserId.current=user.id;Promise.resolve().then(()=>loadCloud(user))}}
-   else{currentUserId.current=null;setD(emptyData());setCloudReady(false);setLoadingCloud(false);setCloudStatus("Signed out");setAuthReady(true)}
+   else{currentUserId.current=null;if(event==="SIGNED_OUT"){try{localStorage.removeItem(KEY)}catch(e){}}setD(emptyData());setCloudReady(false);setLoadingCloud(false);setCloudStatus("Signed out");setAuthReady(true)}
   });
   return()=>subscription.unsubscribe();
  },[]);
