@@ -227,7 +227,7 @@ function Settings({setD}){const[t,setT]=useState(null);
 
 function AuthScreen(){const[mode,setMode]=useState("login"),[email,setEmail]=useState(""),[password,setPassword]=useState(""),[busy,setBusy]=useState(false),[message,setMessage]=useState("");
  const submit=async e=>{e.preventDefault();setBusy(true);setMessage("");try{
-  if(mode==="signup"){const{data,error}=await sb.auth.signUp({email:email.trim(),password});if(error)throw error;setMessage(data.session?"Account created. Signing you in…":"Account created. Check your email to confirm it, then log in here.");}
+  if(mode==="signup"){const{data,error}=await    sb.auth.signUp({email:email.trim(),password,options:{emailRedirectTo:"https://shubham7021.github.io/Galla-Guru/"}});if(error)throw error;setMessage(data.session?"Account created. Signing you in…":"Account created. Check your email to confirm it, then log in here.");}
   else{const{error}=await sb.auth.signInWithPassword({email:email.trim(),password});if(error)throw error;}
  }catch(err){setMessage(err.message||"Could not connect. Please try again.")}finally{setBusy(false)}};
  return html`<main style=${{maxWidth:480,margin:"34px auto",padding:20,width:"100%"}}><div className="card" style=${{padding:24}}><div className="brand" style=${{padding:"0 0 8px"}}>🪙 Galla <span>Guru</span></div><h1 style=${{marginBottom:8}}>${mode==="login"?"Welcome back":"Create your shop account"}</h1><p className="mu">${mode==="login"?"Log in to access your shop data from any device.":"Sign up to save your shop data securely to the cloud."}</p>
