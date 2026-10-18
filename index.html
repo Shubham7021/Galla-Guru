@@ -258,6 +258,28 @@ function App(){const[d,setD]=useState(emptyData),[v,setV]=useState("dashboard"),
   }catch(err){setCloudStatus("Cloud error: "+(err.message||"Unable to load data"));setCloudReady(false)}
   finally{setLoadingCloud(false);setAuthReady(true)}
  };
+ const stableJSON=x=>JSON.stringify(x,(k,v)=>v&&typeof v==="object"&&!Array.isArray(v)?Object.keys(v).sort().reduce((o,key)=>(o[key]=v[key],o),{}):v);
+ const saveSequence=React.useRef(0);
+ const commitData=next=>{
+  const clean=normalizeData(next);
+  setD(clean);
+  try{localStorage.setItem(KEY,JSON.stringify(clean))}catch(e){}
+  if(!authUser||!cloudReady||loadingCloud)return;
+  const userId=authUser.id,sequence=++saveSequence.current,payload=JSON.stringify(clean);
+  setCloudStatus("Saving changes…");
+  cloudSaveQueue=cloudSaveQueue.catch(()=>{}).then(async()=>{
+   if(currentUserId.current!==userId)return;
+   const{error}=await sb.from("shop_data").upsert({user_id:userId,app_data:JSON.parse(payload),updated_at:new Date().toISOString()},{onConflict:"user_id"});
+   if(error)throw error;
+   const{data:check,error:checkError}=await sb.from("shop_data").select("app_data").eq("user_id",userId).maybeSingle();
+   if(checkError)throw checkError;
+   if(!check||stableJSON(normalizeData(check.app_data))!==stableJSON(clean))throw new Error("Save verification failed: data could not be confirmed in cloud");
+  }).then(()=>{
+   if(currentUserId.current===userId&&sequence===saveSequence.current)setCloudStatus("All changes synced");
+  }).catch(err=>{
+   if(currentUserId.current===userId&&sequence===saveSequence.current)setCloudStatus("Sync error: "+(err.message||"Please check your connection"));
+  });
+ };
  useEffect(()=>{
   const{data:{subscription}}=sb.auth.onAuthStateChange((event,session)=>{
    const user=session?.user||null;setAuthUser(user);
@@ -266,28 +288,13 @@ function App(){const[d,setD]=useState(emptyData),[v,setV]=useState("dashboard"),
   });
   return()=>subscription.unsubscribe();
  },[]);
- useEffect(()=>{if(!authUser||!cloudReady)return;
-  // Wait until the exact cloud-loaded object is applied before allowing cloud saves.
-  const snapshot=cloudLoadSnapshot.current;
-  if(snapshot&&snapshot.userId===authUser.id){
-   if(d!==snapshot.data)return;
-   cloudLoadSnapshot.current=null;
-   try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}
-   return; // This data is already in the cloud; do not overwrite it on initial load.
-  }
-  try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}
-  const userId=authUser.id,payload=JSON.stringify(d);
-  cloudSaveQueue=cloudSaveQueue.then(async()=>{
-   const{error}=await sb.from("shop_data").upsert({user_id:userId,app_data:JSON.parse(payload),updated_at:new Date().toISOString()},{onConflict:"user_id"});
-   if(error)throw error;
-  }).then(()=>{if(currentUserId.current===userId)setCloudStatus("All changes synced")}).catch(err=>{if(currentUserId.current===userId)setCloudStatus("Sync error: "+(err.message||"Please check your connection"))});
- },[d,authUser,cloudReady]);
+ // Saves are triggered explicitly by commitData after user edits, not by a state effect.
  const go=x=>{setV(x);window.scrollTo(0,0)};
  if(!authReady)return html`<main style=${{maxWidth:480,margin:"50px auto",padding:20}}><div className="card">Connecting to Galla Guru…</div></main>`;
  if(!authUser)return html`<${AuthScreen}/>`;
  if(loadingCloud)return html`<main style=${{maxWidth:480,margin:"50px auto",padding:20}}><div className="card">Loading your shop data from the cloud…</div></main>`;
  if(authUser&&!cloudReady)return html`<main style=${{maxWidth:480,margin:"50px auto",padding:20}}><div className="card"><h2>Could not load your cloud data</h2><p className="mu">${cloudStatus}</p><p>Please check the Supabase table and policies, then retry. Your shop data is not being edited or saved until cloud loading succeeds.</p><button className="btn" onClick=${()=>loadCloud(authUser)}>Retry cloud connection</button><button className="lnk" onClick=${async()=>{await sb.auth.signOut()}}>Log out</button></div></main>`;
  return html`<div><div className="top"><div className="brand">🪙 Galla <span>Guru</span></div><div className="tg">${cloudStatus} · ${authUser.email||"Signed in"}</div><button className="btn" onClick=${async()=>{await sb.auth.signOut()}}>Log out</button></div><div className="app"><nav className="side">${NAV.map(n=>html`<button key=${n[0]} className=${"nav"+(v===n[0]?" on":"")} onClick=${()=>go(n[0])}><span>${n[1]}</span>${n[2]}</button>`)}</nav>
- <main>${v==="dashboard"?html`<${Dash} d=${d} go=${go}/>`:v==="sales"?html`<${Sales} d=${d} setD=${setD}/>`:v==="expenses"?html`<${Expenses} d=${d} setD=${setD}/>`:v==="inventory"?html`<${Inventory} d=${d} setD=${setD}/>`:v==="ai"?html`<${Chat} d=${d}/>`:html`<${Settings} setD=${setD}/>`}</main></div></div>`}
+ <main>${v==="dashboard"?html`<${Dash} d=${d} go=${go}/>`:v==="sales"?html`<${Sales} d=${d} setD=${commitData}/>`:v==="expenses"?html`<${Expenses} d=${d} setD=${commitData}/>`:v==="inventory"?html`<${Inventory} d=${d} setD=${commitData}/>`:v==="ai"?html`<${Chat} d=${d}/>`:html`<${Settings} setD=${commitData}/>`}</main></div></div>`}
 ReactDOM.createRoot(document.getElementById("root")).render(html`<${App}/>`);
 </script></body></html>
