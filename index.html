@@ -43,6 +43,7 @@ input,select{font:inherit;color:var(--tx);background:var(--bg);border:1px solid 
 <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script id="core">
 /* CORE: all money and stock rules live here, separate from the screens */
 const ymd=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
@@ -139,7 +140,13 @@ const inr2=n=>"₹"+Number(n).toLocaleString("en-IN",{maximumFractionDigits:2});
 const lbl=m=>new Date(m+"-15").toLocaleString("en-IN",{month:"short",year:"numeric"});
 const sh=m=>new Date(m+"-15").toLocaleString("en-IN",{month:"short"});
 const KEY="smartbiz_v1";
-function load(){try{const x=localStorage.getItem(KEY);if(x)return JSON.parse(x)}catch(e){}return Core.demo()}
+const SUPABASE_URL="https://vnlmmweczzxkmxmxnwet.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_Od1CK5hfBzWgzlH55lrp6A_hNhMIRkD";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const emptyData=()=>({products:[],sales:[],expenses:[]});
+function normalizeData(x){return{products:Array.isArray(x?.products)?x.products:[],sales:Array.isArray(x?.sales)?x.sales:[],expenses:Array.isArray(x?.expenses)?x.expenses:[]}}
+function getLocalData(){try{const x=localStorage.getItem(KEY);if(x)return normalizeData(JSON.parse(x))}catch(e){}return null}
+let cloudSaveQueue=Promise.resolve();
 const NAV=[["dashboard","▦","Dashboard"],["sales","₹","Sales"],["expenses","⇩","Expenses"],["inventory","▤","Inventory"],["ai","✦","Ask Guru"],["settings","⚙","Settings"]];
 const CATS=["Rent","Salaries","Electricity","Transport","Packaging","Marketing","Other"];
 
@@ -212,16 +219,62 @@ function Chat({d}){const[m,setM]=useState([{r:"bot",t:"Namaste! 🙏 I am the Ga
 
 function Settings({setD}){const[t,setT]=useState(null);
  return html`<div><div className="hd"><h1>Settings</h1></div>
- <div className="card" style=${{marginBottom:12}}><h3>Your data</h3><p className="mu">Data is saved only in this browser on this device. Clearing browser data will remove it.</p>
+ <div className="card" style=${{marginBottom:12}}><h3>Your data</h3><p className="mu">Your shop data is linked to your account and synced to Supabase cloud storage. Keep your login details private.</p>
  <div className="row"><${Confirm} cls="btn" label="Reset demo data" onYes=${()=>setD(Core.demo())}/><${Confirm} cls="btn ghost" label="Clear everything" onYes=${()=>setD({products:[],sales:[],expenses:[]})}/></div></div>
  <div className="card" style=${{marginBottom:12}}><h3>Calculation rules</h3><div className="mu">Revenue = quantity × selling price<br/>Product cost = quantity × purchase cost<br/>Gross profit = revenue − product cost<br/>Estimated net profit = gross profit − operating expenses</div></div>
  <div className="card" style=${{marginBottom:12}}><h3>Self-check</h3><button className="btn" onClick=${()=>setT(Core.tests())}>Run calculation tests</button>${t?html`<div style=${{marginTop:10}}><b>${t.filter(x=>x[1]).length} of ${t.length} passed</b>${t.map(x=>html`<div key=${x[0]} className=${x[1]?"gp":"ls"}>${x[1]?"✓":"✗"} ${x[0]}</div>`)}</div>`:null}</div>
  <div className="card"><h3>Not built yet</h3><div className="mu">Login, online payments, cloud storage and a real AI service are not part of this prototype.</div></div></div>`}
 
-function App(){const[d,setD]=useState(load),[v,setV]=useState("dashboard");
- useEffect(()=>{try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}},[d]);
+function AuthScreen(){const[mode,setMode]=useState("login"),[email,setEmail]=useState(""),[password,setPassword]=useState(""),[busy,setBusy]=useState(false),[message,setMessage]=useState("");
+ const submit=async e=>{e.preventDefault();setBusy(true);setMessage("");try{
+  if(mode==="signup"){const{data,error}=await sb.auth.signUp({email:email.trim(),password});if(error)throw error;setMessage(data.session?"Account created. Signing you in…":"Account created. Check your email to confirm it, then log in here.");}
+  else{const{error}=await sb.auth.signInWithPassword({email:email.trim(),password});if(error)throw error;}
+ }catch(err){setMessage(err.message||"Could not connect. Please try again.")}finally{setBusy(false)}};
+ return html`<main style=${{maxWidth:480,margin:"34px auto",padding:20,width:"100%"}}><div className="card" style=${{padding:24}}><div className="brand" style=${{padding:"0 0 8px"}}>🪙 Galla <span>Guru</span></div><h1 style=${{marginBottom:8}}>${mode==="login"?"Welcome back":"Create your shop account"}</h1><p className="mu">${mode==="login"?"Log in to access your shop data from any device.":"Sign up to save your shop data securely to the cloud."}</p>
+ <form onSubmit=${submit}><label>Email address<input type="email" autocomplete="email" required value=${email} onChange=${e=>setEmail(e.target.value)} style=${{marginBottom:12}}/></label><label>Password<input type="password" autocomplete=${mode==="login"?"current-password":"new-password"} required minLength="6" value=${password} onChange=${e=>setPassword(e.target.value)} style=${{marginBottom:12}}/></label><button className="btn" type="submit" disabled=${busy} style=${{width:"100%",opacity:busy?.65:1}}>${busy?"Please wait…":mode==="login"?"Log in":"Create account"}</button></form>
+ ${message?html`<div className="info" style=${{marginTop:12}}>${message}</div>`:null}<div className="row" style=${{justifyContent:"center",marginTop:14}}><button className="lnk" onClick=${()=>{setMode(mode==="login"?"signup":"login");setMessage("")}}>${mode==="login"?"New here? Create an account":"Already have an account? Log in"}</button></div></div></main>`}
+
+function App(){const[d,setD]=useState(emptyData),[v,setV]=useState("dashboard"),[authUser,setAuthUser]=useState(null),[authReady,setAuthReady]=useState(false),[loadingCloud,setLoadingCloud]=useState(false),[cloudReady,setCloudReady]=useState(false),[cloudStatus,setCloudStatus]=useState("Connecting…");
+ const currentUserId=React.useRef(null);
+ const loadCloud=async user=>{
+  setLoadingCloud(true);setCloudReady(false);setCloudStatus("Loading cloud data…");
+  try{
+   const{data,error}=await sb.from("shop_data").select("app_data").eq("user_id",user.id).maybeSingle();
+   if(error)throw error;
+   let next;
+   if(data&&data.app_data){next=normalizeData(data.app_data)}
+   else{
+    const local=getLocalData();
+    next=emptyData();
+    if(local&&window.confirm("Local shop data was found on this device. Migrate this data into your account? Choose Cancel to start with an empty cloud account."))next=local;
+    const{error:insertError}=await sb.from("shop_data").upsert({user_id:user.id,app_data:next,updated_at:new Date().toISOString()},{onConflict:"user_id"});
+    if(insertError)throw insertError;
+   }
+   setD(next);try{localStorage.setItem(KEY,JSON.stringify(next))}catch(e){}
+   setCloudStatus("Cloud sync ready");setCloudReady(true);
+  }catch(err){setCloudStatus("Cloud error: "+(err.message||"Unable to load data"));setCloudReady(false)}
+  finally{setLoadingCloud(false);setAuthReady(true)}
+ };
+ useEffect(()=>{
+  const{data:{subscription}}=sb.auth.onAuthStateChange((event,session)=>{
+   const user=session?.user||null;setAuthUser(user);
+   if(user){if(currentUserId.current!==user.id){currentUserId.current=user.id;Promise.resolve().then(()=>loadCloud(user))}}
+   else{currentUserId.current=null;setD(emptyData());setCloudReady(false);setLoadingCloud(false);setCloudStatus("Signed out");setAuthReady(true)}
+  });
+  return()=>subscription.unsubscribe();
+ },[]);
+ useEffect(()=>{if(!authUser||!cloudReady)return;
+  try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}
+  cloudSaveQueue=cloudSaveQueue.then(async()=>{
+   const{error}=await sb.from("shop_data").upsert({user_id:authUser.id,app_data:d,updated_at:new Date().toISOString()},{onConflict:"user_id"});
+   if(error)throw error;
+  }).then(()=>setCloudStatus("All changes synced")).catch(err=>setCloudStatus("Sync error: "+(err.message||"Please check your connection")));
+ },[d,authUser,cloudReady]);
  const go=x=>{setV(x);window.scrollTo(0,0)};
- return html`<div><div className="top"><div className="brand">🪙 Galla <span>Guru</span></div><div className="tg">Dukaan ka hisaab, ab aasaan</div></div><div className="app"><nav className="side">${NAV.map(n=>html`<button key=${n[0]} className=${"nav"+(v===n[0]?" on":"")} onClick=${()=>go(n[0])}><span>${n[1]}</span>${n[2]}</button>`)}</nav>
+ if(!authReady)return html`<main style=${{maxWidth:480,margin:"50px auto",padding:20}}><div className="card">Connecting to Galla Guru…</div></main>`;
+ if(!authUser)return html`<${AuthScreen}/>`;
+ if(loadingCloud)return html`<main style=${{maxWidth:480,margin:"50px auto",padding:20}}><div className="card">Loading your shop data from the cloud…</div></main>`;
+ return html`<div><div className="top"><div className="brand">🪙 Galla <span>Guru</span></div><div className="tg">${cloudStatus} · ${authUser.email||"Signed in"}</div><button className="btn" onClick=${async()=>{await sb.auth.signOut()}}>Log out</button></div><div className="app"><nav className="side">${NAV.map(n=>html`<button key=${n[0]} className=${"nav"+(v===n[0]?" on":"")} onClick=${()=>go(n[0])}><span>${n[1]}</span>${n[2]}</button>`)}</nav>
  <main>${v==="dashboard"?html`<${Dash} d=${d} go=${go}/>`:v==="sales"?html`<${Sales} d=${d} setD=${setD}/>`:v==="expenses"?html`<${Expenses} d=${d} setD=${setD}/>`:v==="inventory"?html`<${Inventory} d=${d} setD=${setD}/>`:v==="ai"?html`<${Chat} d=${d}/>`:html`<${Settings} setD=${setD}/>`}</main></div></div>`}
 ReactDOM.createRoot(document.getElementById("root")).render(html`<${App}/>`);
 </script></body></html>
