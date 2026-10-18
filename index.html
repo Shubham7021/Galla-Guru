@@ -236,6 +236,7 @@ function AuthScreen(){const[mode,setMode]=useState("login"),[email,setEmail]=use
 
 function App(){const[d,setD]=useState(emptyData),[v,setV]=useState("dashboard"),[authUser,setAuthUser]=useState(null),[authReady,setAuthReady]=useState(false),[loadingCloud,setLoadingCloud]=useState(false),[cloudReady,setCloudReady]=useState(false),[cloudStatus,setCloudStatus]=useState("Connecting…");
  const currentUserId=React.useRef(null);
+ const cloudLoadSnapshot=React.useRef(null);
  const loadCloud=async user=>{
   setLoadingCloud(true);setCloudReady(false);setCloudStatus("Loading cloud data…");
   try{
@@ -250,6 +251,8 @@ function App(){const[d,setD]=useState(emptyData),[v,setV]=useState("dashboard"),
     const{error:insertError}=await sb.from("shop_data").upsert({user_id:user.id,app_data:next,updated_at:new Date().toISOString()},{onConflict:"user_id"});
     if(insertError)throw insertError;
    }
+   // Prevent an initial stale render from overwriting the data just loaded from cloud.
+   cloudLoadSnapshot.current={userId:user.id,data:next};
    setD(next);try{localStorage.setItem(KEY,JSON.stringify(next))}catch(e){}
    setCloudStatus("Cloud sync ready");setCloudReady(true);
   }catch(err){setCloudStatus("Cloud error: "+(err.message||"Unable to load data"));setCloudReady(false)}
@@ -264,11 +267,20 @@ function App(){const[d,setD]=useState(emptyData),[v,setV]=useState("dashboard"),
   return()=>subscription.unsubscribe();
  },[]);
  useEffect(()=>{if(!authUser||!cloudReady)return;
+  // Wait until the exact cloud-loaded object is applied before allowing cloud saves.
+  const snapshot=cloudLoadSnapshot.current;
+  if(snapshot&&snapshot.userId===authUser.id){
+   if(d!==snapshot.data)return;
+   cloudLoadSnapshot.current=null;
+   try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}
+   return; // This data is already in the cloud; do not overwrite it on initial load.
+  }
   try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}
+  const userId=authUser.id,payload=JSON.stringify(d);
   cloudSaveQueue=cloudSaveQueue.then(async()=>{
-   const{error}=await sb.from("shop_data").upsert({user_id:authUser.id,app_data:d,updated_at:new Date().toISOString()},{onConflict:"user_id"});
+   const{error}=await sb.from("shop_data").upsert({user_id:userId,app_data:JSON.parse(payload),updated_at:new Date().toISOString()},{onConflict:"user_id"});
    if(error)throw error;
-  }).then(()=>setCloudStatus("All changes synced")).catch(err=>setCloudStatus("Sync error: "+(err.message||"Please check your connection")));
+  }).then(()=>{if(currentUserId.current===userId)setCloudStatus("All changes synced")}).catch(err=>{if(currentUserId.current===userId)setCloudStatus("Sync error: "+(err.message||"Please check your connection"))});
  },[d,authUser,cloudReady]);
  const go=x=>{setV(x);window.scrollTo(0,0)};
  if(!authReady)return html`<main style=${{maxWidth:480,margin:"50px auto",padding:20}}><div className="card">Connecting to Galla Guru…</div></main>`;
